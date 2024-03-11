@@ -10,6 +10,12 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
+    def __init__(self):
+        """
+        Initialize FileStorage class.
+        """
+        self.reload()
+
     def all(self):
         """
         Returns the dictionary __objects.
@@ -42,6 +48,11 @@ class FileStorage:
                 data = json.load(file)
                 for key, obj_data in data.items():
                     class_name, obj_id = key.split('.')
-                    self.__objects[key] = eval(class_name)(**obj_data)
+                    if class_name == 'User':
+                        obj = User(**obj_data)
+                    else:
+                        # Handle other classes if needed
+                        obj = eval(class_name)(**obj_data)
+                    self.__objects[key] = obj
         except FileNotFoundError:
             pass
